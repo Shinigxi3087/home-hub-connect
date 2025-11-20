@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { ContactSellerDialog } from './ContactSellerDialog';
 
 interface ListingCardProps {
   listing: Listing;
@@ -133,6 +134,14 @@ export const ListingCard = ({ listing, isFavorite = false, onFavoriteChange }: L
           <p className="text-sm text-muted-foreground">
             {listing.city}, {listing.state} {listing.zip_code}
           </p>
+          
+          <div className="mt-4">
+            <ContactSellerDialog
+              listingId={listing.id}
+              sellerId={listing.seller_id}
+              listingTitle={listing.title}
+            />
+          </div>
         </CardContent>
       </Card>
     </Link>
