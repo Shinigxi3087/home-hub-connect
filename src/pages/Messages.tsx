@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { ConversationList } from '@/components/messages/ConversationList';
 import { MessageThread } from '@/components/messages/MessageThread';
 import { Message, Listing } from '@/types/database';
@@ -21,6 +21,7 @@ interface Conversation {
 export default function Messages() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -32,6 +33,12 @@ export default function Messages() {
     }
 
     fetchConversations();
+    
+    // Check if there's a listing parameter to auto-select
+    const listingParam = searchParams.get('listing');
+    if (listingParam) {
+      setSelectedConversation(listingParam);
+    }
     
     // Subscribe to new messages
     const channel = supabase
@@ -53,7 +60,7 @@ export default function Messages() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, navigate]);
+  }, [user, navigate, searchParams]);
 
   const fetchConversations = async () => {
     if (!user) return;

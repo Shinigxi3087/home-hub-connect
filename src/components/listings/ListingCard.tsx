@@ -73,8 +73,8 @@ export const ListingCard = ({ listing, isFavorite = false, onFavoriteChange }: L
   };
 
   return (
-    <Link to={`/listings/${listing.id}`}>
-      <Card className="group overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <Card className="group overflow-hidden hover:shadow-lg transition-shadow duration-300">
+      <Link to={`/listing/${listing.id}`}>
         <div className="relative aspect-[4/3] overflow-hidden">
           {listing.images.length > 0 ? (
             <img
@@ -94,21 +94,23 @@ export const ListingCard = ({ listing, isFavorite = false, onFavoriteChange }: L
             )}
             <Badge variant="secondary">16H ago</Badge>
           </div>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute top-3 right-3 bg-background/80 hover:bg-background"
-            onClick={handleToggleFavorite}
-            disabled={isTogglingFavorite}
-          >
-            <Heart
-              className={`w-5 h-5 ${isFavorite ? 'fill-primary text-primary' : 'text-foreground'}`}
-            />
-          </Button>
         </div>
+      </Link>
 
-        <CardContent className="p-4">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="absolute top-3 right-3 bg-background/80 hover:bg-background z-10"
+        onClick={handleToggleFavorite}
+        disabled={isTogglingFavorite}
+      >
+        <Heart
+          className={`w-5 h-5 ${isFavorite ? 'fill-primary text-primary' : 'text-foreground'}`}
+        />
+      </Button>
+
+      <CardContent className="p-4">
+        <Link to={`/listing/${listing.id}`} className="block">
           <div className="flex items-center gap-2 mb-3">
             <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
               <Bed className="w-4 h-4" />
@@ -134,16 +136,16 @@ export const ListingCard = ({ listing, isFavorite = false, onFavoriteChange }: L
           <p className="text-sm text-muted-foreground">
             {listing.city}, {listing.state} {listing.zip_code}
           </p>
-          
-          <div className="mt-4">
-            <ContactSellerDialog
-              listingId={listing.id}
-              sellerId={listing.seller_id}
-              listingTitle={listing.title}
-            />
-          </div>
-        </CardContent>
-      </Card>
-    </Link>
+        </Link>
+        
+        <div className="mt-4">
+          <ContactSellerDialog
+            listingId={listing.id}
+            sellerId={listing.seller_id}
+            listingTitle={listing.title}
+          />
+        </div>
+      </CardContent>
+    </Card>
   );
 };
